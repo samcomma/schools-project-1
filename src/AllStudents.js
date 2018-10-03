@@ -9,7 +9,7 @@ class AllStudents extends Component {
   render () {
     const { students, schools, deleteStudent } = this.props
     return (
-      <div id='stories' className='column'>
+      <div id='students'>
         <h3>Students:</h3>
         <hr />
         <br />

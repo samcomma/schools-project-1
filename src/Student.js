@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { getStudents, deleteStudent } from './store'
+import { deleteStudent } from './store'
 //import StudentForm from './StudentForm'
 
 class Student extends Component {
@@ -11,7 +11,7 @@ class Student extends Component {
     const studentsSchool = schools.find(school => school.id === student.schoolId)
     if (!student) return null
     return (
-      <div id='single-story' className='column'>
+      <div id='single-student'>
         <h2>{ student.firstName } { student.lastName }</h2>
         <hr />
         <h3>Information</h3>

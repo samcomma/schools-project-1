@@ -24,7 +24,7 @@ class Main extends Component {
     return (
       <Router>
         <div id='main'>
-          <div className='column container'>
+          <div>
             <Navbar />
           </div>
           <Switch>
