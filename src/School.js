@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
+import {Link} from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { getSchool, deleteSchool } from './store'
+import { deleteSchool, getSchools } from './store'
 
 
-export default class School extends Component {
+class School extends Component {
 
 
   render () {
-    const { school, deleteSchool } = this.props
+    const { school, students, deleteSchool } = this.props
+    const studentsAttending = students.filter(student => school.id === student.schoolId)
+    if (!school) return null
     return (
-      <div id='single-story' className='column'>
+      <div id='single-school' className='column'>
         <h2>{ school.name }</h2>
         <hr />
         <h3>Address:</h3>
@@ -20,11 +23,10 @@ export default class School extends Component {
         <div>{ school.description }</div>
         <br />
         <h3>Students:</h3>
-            {/*<SchoolsStudentList id={school.id}/>*/}
             <div>
                 <ul>
                     {
-                    school.students.map(student => (
+                    studentsAttending.map(student => (
                         <li key={student.id}>
                         <Link to={`/students/${student.id}`}>
                             {student.firstName} {student.lastName}
@@ -32,11 +34,15 @@ export default class School extends Component {
                         </li>
                     ))
                     }
-                </ul>
+                  </ul>
             </div>
         <br />
-        <button className="button" onClick={() => deleteSchool(school.id)}>
-            Remove
+        <Link to='/schools/create'>
+          <button>Add School</button>
+        </Link>
+        <br />
+        <button className="button" onClick={() => deleteSchool(school)}>
+            Remove this School
         </button>
       </div>
     )
@@ -44,20 +50,17 @@ export default class School extends Component {
 }
 
 
-// CAN BE CLEANED UP:
-const mapStateToProps = (state, ownProps) => {
-    // console.log('STATE IN MAPSTATE: ', state)
-    // console.log('OWNPROPS IN MAPSTATE: ', ownProps.id)
-    // console.log('GET SCHOOL: ', getSchool(ownProps.id, state.schools))
+  const mapStateToProps = ({ schools, students }, { match }) => {
+    const school = schools.find(school => school.id === match.params.id * 1);
     return {
-      schools: state.schools,
-      school: getSchool(ownProps.id, state.schools)
+      school,
+      students
     }
   }
 
 
 const mapDispatchToProps = dispatch => ({
-    deleteSchool: id => dispatch(deleteSchool(id))
+    deleteSchool: school => dispatch(deleteSchool(school))
 })
 
  

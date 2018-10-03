@@ -46,14 +46,15 @@ class Main extends Component {
   }
 }
 
-
+const mapStateToProps = ({ schools, students }) => ({
+  schools,
+  students
+})
 
   
 const mapDispatchToProps = (dispatch) => ({
-    getSchools: () => dispatch(getSchools()),
-    getStudents: () => dispatch(getStudents())
+    getStudents: () => dispatch(getStudents()),
+    getSchools: () => dispatch(getSchools())
 })
   
-export default connect(null, mapDispatchToProps)(Main)
-  
-  
+export default connect(mapStateToProps, mapDispatchToProps)(Main)

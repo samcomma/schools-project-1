@@ -1,23 +1,29 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { getStudent, deleteStudent } from './store'
-import StudentForm from './StudentForm'
+import { getStudents, deleteStudent } from './store'
+//import StudentForm from './StudentForm'
 
 class Student extends Component {
 
   render () {
-    const { student, deleteStudent } = this.props
+    const { student, schools, deleteStudent } = this.props
+    const studentsSchool = schools.find(school => school.id === student.schoolId)
+    if (!student) return null
     return (
       <div id='single-story' className='column'>
         <h2>{ student.firstName } { student.lastName }</h2>
         <hr />
         <h3>Information</h3>
-        <div>Attending: </div>
+        <div>Attending: {studentsSchool ? studentsSchool.name : 'Not Enrolled'}</div>
         <br />
         <div>GPA: { student.gpa }</div>
         <br />
-        <button className="button" onClick={() => deleteStudent(student.id)}>
+        <Link to='/students/create'>
+          <button>Add Student</button>
+        </Link>
+        <br />
+        <button className="button" onClick={() => deleteStudent(student)}>
             Remove
         </button>
       </div>
@@ -27,15 +33,16 @@ class Student extends Component {
 
 
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-      students: state.students,
-      student: getStudent(ownProps.id, state.students)
-    }
+const mapStateToProps = ({ schools, students }, { match }) => {
+  const student = students.find(student => student.id === match.params.id * 1);
+  return {
+    student,
+    schools
   }
+}
 
 const mapDispatchToProps = dispatch => ({
-    deleteStudent: id => dispatch(deleteStudent(id))
+    deleteStudent: student => dispatch(deleteStudent(student))
 })
 
  

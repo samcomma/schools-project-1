@@ -9,18 +9,21 @@ class AllSchools extends Component {
   render () {
     const { schools, deleteSchool } = this.props
     return (
-      <div id='stories' className='column'>
+      <div id='schools' className='column'>
+        <h3>Schools:</h3>
+        <hr />
+        <br />
         <ul>
             {
             schools.map(school => (
-                <li className='story' key={school.id}>
-                    <Link to={`/schools/${school.id}`}> 
+                <li className='school' key={school.id}>
+                    <Link to={`/schools/${school.id}`} style={{ textDecoration: 'none' }}> 
                         <h4>{school.name} (Students: {school.students.length}) </h4>
                     </Link>
-                    <button className="button" onClick={() => deleteSchool(school.id)}>
+                    <button className="button" onClick={() => deleteSchool(school)}>
                         Remove
                     </button>
-                    <hr />
+                    <br />
                 </li>
             ))
             }
@@ -35,13 +38,13 @@ class AllSchools extends Component {
 
 
 const mapStateToProps = ({ schools, students }) => ({
-    schools,
-    students
+  schools,
+  students
 })
 
 
 const mapDispatchToProps = dispatch => ({
-    deleteSchool: id => dispatch(deleteSchool(id))
+    deleteSchool: school => dispatch(deleteSchool(school))
 })
 
  

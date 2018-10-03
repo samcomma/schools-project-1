@@ -63,6 +63,7 @@ const getSchools = () => {
     axios.get('/api/schools')
       .then(res => res.data)
       .then(schools => dispatch(get_Schools(schools)))
+      .catch(error => console.log(error.message))
   }
 }
 
@@ -71,6 +72,7 @@ const createSchool = (school) => {
     axios.post('/api/schools', school)
       .then(res => res.data)
       .then(school => dispatch(create_School(school)))
+      .catch(error => console.log(error.message))
   }
 }
 
@@ -79,6 +81,8 @@ const updateSchool = (school) => {
     axios.put(`/api/schools/${school.id}`, school)
       .then(res => res.data)
       .then(school => dispatch(update_School(school)))
+      .then(() => history.push('/schools'))
+      .catch(error => console.log(error.message))
   }
 }
 
@@ -88,6 +92,7 @@ const deleteSchool = (school) => {
     axios.delete(`/api/schools/${school.id}`)
       .then(res => res.data)
       .then(() => dispatch(delete_School(school)))
+      .catch(error => console.log(error.message))
   }
 }
 
@@ -97,6 +102,7 @@ const getStudents = () => {
     axios.get('/api/students')
       .then(res => res.data)
       .then(students => dispatch(get_Students(students)))
+      .catch(error => console.log(error.message))
   }
 }
 
@@ -106,15 +112,18 @@ const createStudent = (student) => {
     axios.post('/api/students', student)
       .then(res => res.data)
       .then(student => dispatch(create_Student(student)))
+      .catch(error => console.log(error.message))
   }
 }
 
 
-const updateStudent = (student) => {
+const updateStudent = (student, history) => {
   return (dispatch) => {
     axios.put(`/api/students/${student.id}`, student)
       .then(res => res.data)
       .then(student => dispatch(update_Student(student)))
+      .then(() => history.push('/students'))
+      .catch(error => console.log(error.message))
   }
 }
 
@@ -125,6 +134,7 @@ const deleteStudent = (student) => {
     axios.delete(`/api/students/${student.id}`)
       .then(res => res.data)
       .then(() => dispatch(delete_Student(student)))
+      .catch(error => console.log(error.message))
   }
 }
 
@@ -173,18 +183,15 @@ const reducer = combineReducers({
 const store = createStore(reducer, applyMiddleware(logger, thunk))
 
 
-export default store
-// DO I NEED TO EXPORT?:
 export { 
-  getSchools,
-  createSchool,
-  updateSchool,
-  deleteSchool,
-  getStudents,
-  createStudent,
-  updateStudent,
-  deleteStudent
-}
+    getSchools,
+    createSchool,
+    updateSchool,
+    deleteSchool,
+    getStudents,
+    createStudent,
+    updateStudent,
+    deleteStudent
+  }
 
-
-
+export default store

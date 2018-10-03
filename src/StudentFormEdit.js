@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import store, { createStudent } from './store'
+import store, { updateStudent } from './store'
 
-class StudentForm extends Component {
+class StudentFormEdit extends Component {
   constructor(props) {
     super(props)
+    const { student } = this.props
     this.state = {
-      firstName: '',
-      lastName: '',
-      gpa: 0
+        firstName: student ? student.firstname : '',
+        lastName: student ? student.lastname : '',
+        gpa: student ? student.gpa : 0,
+        schoolId: student.schoolId ? student.schoolId : ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -22,15 +24,15 @@ class StudentForm extends Component {
   
 
   handleSubmit (evt) {
-    //evt.preventDefault()
-    store.dispatch(createStudent(this.state))
+    evt.preventDefault()
+    store.dispatch(updateStudent(this.state))
   }
 
   render() {
     const { schools } = this.props
     return (
       <div>
-        <h3>Create Student:</h3>
+        <h3>Update Student:</h3>
         <hr />
         <br />
         <form id='createForm' onSubmit={this.handleSubmit}>
@@ -56,9 +58,12 @@ class StudentForm extends Component {
 }
 
 
-const mapStateToProps = ({ students, schools }) => ({
-    students,
-    schools
-  })
+const mapStateToProps = ({ schools, students }, { match }) => {
+    const student = students.find(student => student.id === match.params.id * 1);
+    return {
+      student,
+      schools
+    }
+  }
 
-export default connect(mapStateToProps)(StudentForm)
+export default connect(mapStateToProps)(StudentFormEdit)
