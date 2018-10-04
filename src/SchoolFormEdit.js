@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import store, { updateSchool } from './store'
+import { updateSchool } from './store'
 
 class SchoolFormEdit extends Component {
   constructor(props) {
@@ -9,7 +9,8 @@ class SchoolFormEdit extends Component {
     this.state = {
       name: school ? school.name : '',
       address: school ? school.address : '',
-      description: school ? school.description : ''
+      description: school ? school.description : '',
+      id: school ? school.id : ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -23,8 +24,14 @@ class SchoolFormEdit extends Component {
   
 
   handleSubmit(evt) {
+    const { updateSchool } = this.props
     evt.preventDefault()
-    store.dispatch(updateSchool(this.state))
+    updateSchool(this.state)
+    this.setState = {
+      name: '',
+      address: '',
+      description: ''
+    }
   }
 
   render(){
@@ -43,7 +50,7 @@ class SchoolFormEdit extends Component {
             <label>Description:
                 <input type='text' name='description' value={this.state.value} onChange={this.handleChange} />
             </label>
-            <input type='submit' value='Update' />
+            <button value='Update' onClick={() => updateSchool(this.state)}>Update</button>
         </form>
       </div>
     )
@@ -59,4 +66,8 @@ const mapStateToProps = ({ schools, students }, { match }) => {
     }
   }
 
-export default connect(mapStateToProps)(SchoolFormEdit)
+  const mapDispatchToProps = dispatch => ({
+    updateSchool: school => dispatch(updateSchool(school))
+  })
+
+export default connect(mapStateToProps, mapDispatchToProps)(SchoolFormEdit)

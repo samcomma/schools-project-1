@@ -23,9 +23,16 @@ class StudentFormEdit extends Component {
   }
   
 
-  handleSubmit (evt) {
+  handleSubmit(evt) {
+    const { updateStudent } = this.props
     evt.preventDefault()
-    store.dispatch(updateStudent(this.state))
+    updateStudent(this.state)
+    this.setState = {
+      firstName: '',
+      lastName: '',
+      gpa: '',
+      schoolId: ''
+    }
   }
 
   render() {
@@ -46,11 +53,18 @@ class StudentFormEdit extends Component {
             <input type='number' min='0' max='4' name='gpa' value={this.state.gpa} onChange={this.handleChange} />
           </label>
           <label>Attending:
-          <select name='school'>
-              {/*MUST ONLY ALLOW CURRENT SCHOOLS TO BE CHOSEN USING schools PROP*/}
+          <select type='text' name='schoolId' value={this.state.schoolId} onChange={this.handleChange}>
+            <option value=''>Choose School</option>
+                {schools.map(school => {
+                  return (
+                    <option key={school.id} value={school.id}>
+                      {school.name}
+                    </option>
+                  );
+                })}
           </select>
           </label>
-          <input type='submit' value='submit' />
+          <button value='create' onClick={() => updateStudent(this.state)}>Update</button>
         </form>
       </div>
     )
@@ -66,4 +80,8 @@ const mapStateToProps = ({ schools, students }, { match }) => {
     }
   }
 
-export default connect(mapStateToProps)(StudentFormEdit)
+  const mapDispatchToProps = dispatch => ({
+    updateStudent: student => dispatch(updateStudent(student))
+  })
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudentFormEdit)

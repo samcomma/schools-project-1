@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import store, { createSchool } from './store'
+import { createSchool } from './store'
 
 class SchoolForm extends Component {
   constructor(props) {
@@ -22,19 +22,26 @@ class SchoolForm extends Component {
   
 
   handleSubmit(evt) {
-    //evt.preventDefault()
-    store.dispatch(createSchool(this.state))
+    const { createSchool } = this.props
+    evt.preventDefault()
+    createSchool(this.state)
+    this.setState = {
+      name: '',
+      address: '',
+      description: ''
+    }
   }
 
   render(){
+    const { createSchool } = this.props
     return(
       <div>
         <h3>Create School:</h3>
         <hr />
         <br />
-        <form id='createForm' onSubmit={this.handleSubmit}>
+        <form id='createForm' >
             <label>Name:
-                <input type='text' name='name' value={this.state.value} onChange={this.handleChange}/>
+                <input type='text' name='name' value={this.state.value} onChange={this.handleChange} />
             </label>
             <label>Address:
                 <input type='text' name='address' value={this.state.value} onChange={this.handleChange}/>
@@ -42,12 +49,15 @@ class SchoolForm extends Component {
             <label>Description:
                 <input type='text' name='description' value={this.state.value} onChange={this.handleChange} />
             </label>
-            <input type='submit' value='Create' />
+            <button value='create' onClick={() => createSchool(this.state)}>Create</button>
         </form>
       </div>
     )
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  createSchool: school => dispatch(createSchool(school))
+})
 
-export default connect()(SchoolForm)
+export default connect(null, mapDispatchToProps)(SchoolForm)
